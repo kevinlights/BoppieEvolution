@@ -81,7 +81,7 @@ func _on_Food_body_entered(body):
 		queue_free()
 		# emit_signal("FoodEaten", self)
 
-
+# 肉食 deteriorate_time=60 秒未被吃掉就会消失
 func _on_Timer_timeout() -> void:
 	if is_instance_valid(self) and not eaten:
 		Globals.add_food(food_type, -1)

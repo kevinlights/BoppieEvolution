@@ -1,5 +1,6 @@
 extends AI
 
+# 神经网络实现的 AI
 class_name NeuralNetwork
 
 class NN_DNA:
@@ -134,6 +135,7 @@ func _init(fitter_innovations, other_innovations=[]):
 	self.make_and_merge_nns(fitter_innovations, other_innovations)
 	# init_connections(inputs, fully_connected_neurons)
 	
+# 交叉，交叉神经网络，交叉连接
 func crossover(property, other_dna):
 	if property == "dna":
 		make_and_merge_nns(dna.innovations, other_dna.innovations)

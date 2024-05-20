@@ -1,5 +1,6 @@
 extends AI
 
+# 随机 AI，每次移动 1，随机转向
 class_name RandomAI
 
 var curr_turn_factor = 0
@@ -11,7 +12,7 @@ func get_movement_factor(ai_input=null):
 
 func get_turn_factor(ai_input=null):
 	if remaining_calls <= 0:
-		curr_turn_factor = Globals.rng.randf() - .5
-		remaining_calls = Globals.rng.randi() % 200 + 20
+		curr_turn_factor = Globals.rng.randf() - .5 # [-0.5,0.5]
+		remaining_calls = Globals.rng.randi() % 200 + 20 # [20, 210]
 	remaining_calls -= 1
 	return curr_turn_factor

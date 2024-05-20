@@ -1,10 +1,13 @@
 extends RandomAI
 
+
+# 聪明的 AI
 class_name SmartAI
 
 
 
 func get_movement_factor(ai_input=null):
+	# 射线识别到食物，能量大于 0.9，以速度 2 冲向食物，否则以速度 1 正常移动
 	if ai_input[Boppie.Data.RAY_TYPE][0] == ai_input[Boppie.Data.EATS] and ai_input[Boppie.Data.ENERGY] > 0.9:
 		return 2
 	return 1
@@ -19,8 +22,10 @@ func get_turn_factor(ai_input=null):
 	var types = ai_input[Boppie.Data.RAY_TYPE]
 	var dists = ai_input[Boppie.Data.RAY_DIST]
 	var closest_dist = 1
+	# 正前方有食物，移动方向不变
 	if types[0] == Boppie.Raytype.FOOD:
 		return 0
+	# 其他方向有食物，转向食物方向
 	for i in range(1, types.size()):
 		if types[i] == Boppie.Raytype.FOOD:
 			if dists[i] < closest_dist:
@@ -28,4 +33,5 @@ func get_turn_factor(ai_input=null):
 				curr_turn_factor = 2 * ((i % 2) * 2 - 1)
 				remaining_calls = 20 * int((i + 1) / 2)
 				# break
+	# 递归调用直到转向食物方向？
 	return .get_turn_factor(ai_input)

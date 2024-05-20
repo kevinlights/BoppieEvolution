@@ -1,6 +1,8 @@
 extends Node2D
 
+# 游戏核心控制类
 
+# 波比配置类
 class BoppieConfiguration:
 	var group
 	var min_count

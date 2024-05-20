@@ -1,5 +1,7 @@
 extends Camera2D
 
+# 相机放大缩小控制
+
 # Script based on https://www.gdquest.com/tutorial/godot/2d/camera-zoom/
 export var min_zoom := 0.1
 export var max_zoom := 3.0

@@ -1,5 +1,6 @@
 extends Area2D
 
+# 20 个尖刺
 var spikes = 20
 var radius = 15
 var bloodiness = 0
@@ -26,6 +27,7 @@ func _process(delta):
 	if not Globals.performance_mode:
 		rotation += PI * delta
 
+# 碰到陷阱时，波比受到伤害 12， 并触发流血状态
 func _on_Trap_body_entered(body):
 	if body is Boppie:
 		body.take_damage(12)

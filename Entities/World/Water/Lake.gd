@@ -5,7 +5,7 @@ extends Area2D
 export var redraw = true
 export var height = 100
 export var radius = 500
-export var resistance = 0.7
+export var resistance = 0.7 # 水的阻力
 var points = []
 var water_color = Color.deepskyblue
 
@@ -48,14 +48,14 @@ func _draw():
 	points.append(points[0])
 	draw_lake_poly(Color.darkslategray, 1.01)
 	draw_lake_poly(water_color)
-	for i in range(3):
+	for i in range(3): # 画最外围三条白线
 		draw_lake_poly(Color(1, 1, 1, .8), 0.98 - i * 0.02, 3 - i * 0.3)
-	for i in range(4):
+	for i in range(4): # 画内层四层湖水颜色
 		draw_lake_poly(water_color.darkened(0.1 * i), 0.8 - i * 0.1)
 		
 
 func _on_Lake_body_entered(body: Node) -> void:
-	if body is Boppie:
+	if body is Boppie: # 进入湖水，速度变慢，增加水量 100
 		body.ground_movement_penalty_factor = 1 - resistance
 		body.times_drank += 1
 		body.update_water(100)

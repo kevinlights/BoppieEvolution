@@ -1,5 +1,6 @@
 extends Area2D
 
+# 地形阻力
 var resistance_ahead = 0
 
 func _on_TerrainSense_area_entered(area: Area2D) -> void:

@@ -7,18 +7,18 @@ var type = "Boppie"
 var radius := 20.0  # (too much hardcoded, don't change)
 var can_die := true
 var nutrition := 20.0
-var ground_movement_penalty_factor = 1
+var ground_movement_penalty_factor = 1 # 移动惩罚系数
 
 # This is reduced down to 0.5 or so, essentially if a boppie does not manage to eat anything
 # then it gets a large penalty until it has eaten a few foodstuffs.
-var no_food_eaten_penalty = 3.0
+var no_food_eaten_penalty = 3.0 # 无食物吃惩罚系数
 var food_type = Data.FoodType.MEAT
 
 
 # Based on DNA
-var max_energy = 15
-var max_water = 10
-var required_offspring_energy = 10
+var max_energy = 15 # 自身最大能量
+var max_water = 10 # 最大含水量
+var required_offspring_energy = 10 # 产生后代的能量
 var ray_count_additional := 2
 
 # DNA
@@ -26,15 +26,15 @@ var move_speed := 85.0
 var turn_speed := 2.0
 var ray_angle := deg2rad(20)
 var ray_length := 300.0
-var armor := 0.0
-var meat_tolerance := 0.0 setget set_meat_tolerance
-var danger_sense_radius = 150.0
-var max_boost_factor := 2.0
-var max_backwards_factor := -0.75
-var offspring_mutability := 0.05
+var armor := 0.0 # 护甲值
+var meat_tolerance := 0.0 setget set_meat_tolerance # 食肉容忍度
+var danger_sense_radius = 150.0 # 危险感知半径
+var max_boost_factor := 2.0 # 最大冲刺系数
+var max_backwards_factor := -0.75 # 最大后退系数
+var offspring_mutability := 0.05 # 后代变异率
 var generation = Data.Generation.new()
-var scale_factor = 1
-var danger_sense_parts = 4
+var scale_factor = 1 # 伸缩系数
+var danger_sense_parts = 4 # 危险感知部位
 var color = Data.Coloration.new()
 var senses = Data.Senses.new(0
 	| Data.Sense.VISION_RAY_EATS
@@ -46,7 +46,7 @@ var senses = Data.Senses.new(0
 	| Data.Sense.GROUND
 	| Data.Sense.BIAS
 	| Data.Sense.ALLY_SENSE
-)
+) # 感知器官，食物，危险，时间，饥饿，口渴，水，地面，偏差，同盟
 var timer_neuron = Data.NeuronTimer.new()
 
 var dna_allowed_values = {
@@ -414,8 +414,8 @@ func rotation_vector():
 func move(factor, delta):
 	var rot = rotation_vector()
 	$Face.scale_eyes(factor)
-	var armor_factor = (10 - armor) / 10
-	var velocity = rot * factor * move_speed * armor_factor * ground_movement_penalty_factor / scale
+	var armor_factor = (10 - armor) / 10 # 护甲越大，移动速度越慢
+	var velocity = rot * factor * move_speed * armor_factor * ground_movement_penalty_factor / scale # 体型越大，移动速度越慢
 	self.move_and_slide(velocity, Vector2.UP)
 	
 	
@@ -473,7 +473,7 @@ func die():
 func curr_level():
 	return int(offspring_energy / required_offspring_energy)
 	
-func update_water(add_water):
+func update_water(add_water): # 更新水量
 	water = min(max_water, water+add_water)
 		
 func update_energy(add_energy):
@@ -500,20 +500,23 @@ func take_damage(damage) -> float:
 		$BloodParticles.emitting = true
 		update_energy(-actual_damage)
 		return actual_damage
-			
+
+# 升级，增加体型			
 func level_up(new_scale):
 	level += 1
 	$Tween.interpolate_property(self, "scale",
 		scale, Vector2(new_scale, new_scale), .5,
 		Tween.TRANS_BOUNCE, Tween.EASE_IN_OUT)
 	$Tween.start()
-			
+
+# 产生下一代			
 func produce_offspring():
 	offspring_count += 1
 	emit_signal("BoppieOffspring", self)
-	
+
+# 吃食物	
 func eat(food):
-	no_food_eaten_penalty = max(0.5, no_food_eaten_penalty * 0.7)
+	no_food_eaten_penalty = max(0.5, no_food_eaten_penalty * 0.7) # 最低 0.5 的惩罚
 	times_eaten += 1
 	var effectiveness = meat_tolerance if food.food_type == Data.FoodType.MEAT else 1 - meat_tolerance
 	update_energy(food.nutrition * effectiveness)

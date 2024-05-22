@@ -49,6 +49,7 @@ var senses = Data.Senses.new(0
 ) # 感知器官，食物，危险，时间，饥饿，口渴，水，地面，偏差，同盟
 var timer_neuron = Data.NeuronTimer.new()
 
+# 设置 DNA 各项属性的允许范围
 var dna_allowed_values = {
 	"move_speed": Data.DNABounds.new(70, 100, "x*1/30", 85, 5),  # 3 - 6
 	"scale_factor": Data.DNABounds.new(.7, 1.3, "x*x*4"),  # 3 - 9
@@ -201,9 +202,10 @@ func set_dna(new_dna: Dictionary, mutation_factor=1, crossover_dna=null):
 	initialize_dna()
 		
 func mutate(property: String, mutability: float):
-	var value_range = dna_allowed_values[property]
-	var mutation = value_range.upper * mutability * Globals.rng.randfn()
 	if dna_allowed_values != null:
+		var value_range = dna_allowed_values[property]
+		var mutation = value_range.upper * mutability * Globals.rng.randfn()
+		# 在允许的最小值的最大值之间，设置变异后的属性值
 		set(property, clamp(get(property) + mutation, value_range.lower, value_range.upper))
 		
 func crossover(property: String, other_value):

@@ -209,16 +209,19 @@ func mutate(property: String, mutability: float):
 func crossover(property: String, other_value):
 	var remain_current = Globals.rng.randf()
 	var take_other = 1 - remain_current
+	# 交叉算法，从自身随机获取一部分，并从其他个体获取一部分，合并后得到交叉结果
 	var value = get(property) * remain_current + other_value * take_other
 	set(property, value)
 		
-	
+# 从字符串设置 DNA
 func set_dna_str(new_dna: String):
 	set_dna(str2var(new_dna))
-	
+
+# 直接显示 json 	
 func get_dna_str():
 	return var2str(dna)
-	
+
+# 用 ACGT 的方式打印 DNA 序列
 func get_fancy_dna_str():
 	var fancy := ""
 	var bytes := var2str(dna).to_ascii()
@@ -529,6 +532,7 @@ func produce_offspring():
 func eat(food):
 	no_food_eaten_penalty = max(0.5, no_food_eaten_penalty * 0.7) # 最低 0.5 的惩罚
 	times_eaten += 1
+	# 肉食容忍度影响能量吸收效率
 	var effectiveness = meat_tolerance if food.food_type == Data.FoodType.MEAT else 1 - meat_tolerance
 	update_energy(food.nutrition * effectiveness)
 	

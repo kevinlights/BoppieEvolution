@@ -82,6 +82,7 @@ func _process(_delta):
 func _on_Show_toggled(_button_pressed=true):
 	show_dna = $TabContainer/DNA/HBoxContainer/ShowDNA.pressed
 	dna.text = ("%s" % boppie.get_dna_str()) if show_dna else "{ ... }"
+	# dna.text = ("%s" % boppie.get_fancy_dna_str()) if show_dna else "{ ... }"
 	
 
 func _on_CopyDNA_pressed():

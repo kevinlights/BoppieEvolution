@@ -103,8 +103,25 @@ func deactivate(node):
 	node.set_process(false)
 	node.set_physics_process(false)
 
+class FixedLengthArray:
+	var array = PoolStringArray()
+	var max_length = 0
+
+	func _init(_max_length):
+		self.max_length = _max_length
+
+	func add(element):
+		array.append(element)
+		if array.size() > max_length:
+			array.remove(0)  # 移除数组的第一个元素
+
+	func join(sep):
+		return array.join(sep)
+
+var msg_list = FixedLengthArray.new(10)
 func debugMsg(msg):
-	emit_signal("DebugMessage", msg)
+	msg_list.add(msg)
+	emit_signal("DebugMessage", msg_list.join("; "))
 	
 func debugConn():
 	return self

@@ -339,6 +339,7 @@ margin_top = 4.0
 margin_right = 25.0
 margin_bottom = 18.0
 text = "test"
+max_lines_visible = 10
 script = ExtResource( 24 )
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="StatusBar/VBoxContainer/MarginContainer"]

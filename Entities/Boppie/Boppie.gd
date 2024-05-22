@@ -158,6 +158,7 @@ func _ready():
 # DNA
 # ==========================================================================
 
+# 随机化
 func randomize_dna():
 	for property in dna_allowed_values:
 		var bounds = dna_allowed_values[property]
@@ -166,7 +167,8 @@ func randomize_dna():
 				[var resolved_subproperty, var last]:
 					resolved_subproperty.set(last, bounds.random())
 
-func initialize_dna(random_dna=false):
+# 初始化 DNA
+func initialize_dna(_random_dna=false):
 	dna = {}
 	required_offspring_energy = 0
 	for property in dna_allowed_values:
@@ -177,21 +179,25 @@ func initialize_dna(random_dna=false):
 				var bounds = dna_allowed_values[property]
 				if bounds != null:
 					required_offspring_energy += bounds.cost(dna[property])
+	# Globals.debugMsg(var2str(dna))
 	max_water = 10 * pow(scale_factor, 2)
 	max_energy = 15 * pow(scale_factor, 2)
 	
+# "offspring_count": 取出 offspring_count 作为 last
+# "ai.dna": null 取出 dna 作为 last
 func resolve_subproperty(property):
 	var resolved_subproperty = self
 	var subproperties = property.split(".")
-	var last = subproperties[-1]
-	subproperties.remove(subproperties.size() - 1)
+	var last = subproperties[-1] # 取出最后一个元素，如 dna
+	subproperties.remove(subproperties.size() - 1) # 移除最后一个元素
 	for subproperty in subproperties:
 		resolved_subproperty = resolved_subproperty.get(subproperty)
+	# Globals.debugMsg(last)
 	return [resolved_subproperty, last]
 
 func set_dna(new_dna: Dictionary, mutation_factor=1, crossover_dna=null):
 	new_dna = new_dna.duplicate(true)
-	for property in new_dna:
+	for property in new_dna: # 对子属性进行交叉和变异
 		match resolve_subproperty(property):
 			[var resolved_subproperty, var last]:
 				resolved_subproperty.set(last, new_dna[property])

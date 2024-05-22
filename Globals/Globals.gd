@@ -19,6 +19,7 @@ const MEAT_BIT = 1<<10
 const PLANT_BIT = 1<<9
 
 signal FoodEaten(Food)
+signal DebugMessage(msg)
 
 var color = Color(1, 0, 0)
 
@@ -100,3 +101,9 @@ func deactivate(node):
 	node.collision_mask = 0
 	node.set_process(false)
 	node.set_physics_process(false)
+
+func debugMsg(msg):
+	emit_signal("DebugMessage", msg)
+	
+func debugConn():
+	return self

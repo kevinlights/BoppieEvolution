@@ -1,4 +1,4 @@
-[gd_scene load_steps=70 format=2]
+[gd_scene load_steps=71 format=2]
 
 [ext_resource path="res://UI/GameUI/BoppieInformation.gd" type="Script" id=1]
 [ext_resource path="res://UI/GameUI/BoppieFittnessPlot.gd" type="Script" id=2]
@@ -23,6 +23,7 @@
 [ext_resource path="res://UI/GameUI/ProduceOffspring.gd" type="Script" id=21]
 [ext_resource path="res://UI/GameUI/FollowFittest.gd" type="Script" id=22]
 [ext_resource path="res://UI/GameUI/ShowVision.gd" type="Script" id=23]
+[ext_resource path="res://UI/GameUI/DebugMessage.gd" type="Script" id=24]
 
 [sub_resource type="DynamicFontData" id=1]
 font_path = "res://Resources/Fonts/FontAwesome/otfs/Font Awesome 5 Free-Solid-900.otf"
@@ -44,134 +45,134 @@ font_path = "res://Resources/Fonts/FredokaOne-Regular.ttf"
 size = 18
 font_data = SubResource( 5 )
 
-[sub_resource type="DynamicFontData" id=14]
-font_path = "res://Resources/Fonts/FontAwesome/otfs/Font Awesome 5 Free-Solid-900.otf"
-
-[sub_resource type="DynamicFont" id=15]
-font_data = SubResource( 14 )
-
-[sub_resource type="InputEventAction" id=21]
-action = "pause_simulation"
-
-[sub_resource type="ShortCut" id=22]
-shortcut = SubResource( 21 )
-
-[sub_resource type="InputEventAction" id=18]
-action = "decrease_time_factor"
-
-[sub_resource type="ShortCut" id=17]
-shortcut = SubResource( 18 )
-
-[sub_resource type="InputEventAction" id=19]
-action = "increase_time_factor"
-
-[sub_resource type="ShortCut" id=20]
-shortcut = SubResource( 19 )
-
-[sub_resource type="DynamicFontData" id=10]
-font_path = "res://Resources/Fonts/FontAwesome/otfs/Font Awesome 5 Free-Solid-900.otf"
-
-[sub_resource type="DynamicFont" id=11]
-font_data = SubResource( 10 )
-
-[sub_resource type="DynamicFontData" id=12]
-font_path = "res://Resources/Fonts/FredokaOne-Regular.ttf"
-
-[sub_resource type="DynamicFont" id=13]
-font_data = SubResource( 12 )
-
-[sub_resource type="DynamicFont" id=23]
-size = 10
-font_data = SubResource( 5 )
-
-[sub_resource type="StyleBoxFlat" id=9]
-bg_color = Color( 1, 1, 1, 0.0980392 )
-
-[sub_resource type="InputEventAction" id=44]
-action = "toggle_performance_mode"
-
-[sub_resource type="ShortCut" id=45]
-shortcut = SubResource( 44 )
-
-[sub_resource type="InputEventAction" id=39]
-action = "toggle_vision_rays"
-
-[sub_resource type="ShortCut" id=46]
-shortcut = SubResource( 39 )
-
-[sub_resource type="StyleBoxFlat" id=43]
-bg_color = Color( 0.6, 0.6, 0.6, 0 )
-
 [sub_resource type="DynamicFontData" id=7]
-font_path = "res://Resources/Fonts/FredokaOne-Regular.ttf"
+font_path = "res://Resources/Fonts/FontAwesome/otfs/Font Awesome 5 Free-Solid-900.otf"
 
 [sub_resource type="DynamicFont" id=8]
 font_data = SubResource( 7 )
 
-[sub_resource type="Gradient" id=31]
+[sub_resource type="InputEventAction" id=9]
+action = "pause_simulation"
+
+[sub_resource type="ShortCut" id=10]
+shortcut = SubResource( 9 )
+
+[sub_resource type="InputEventAction" id=11]
+action = "decrease_time_factor"
+
+[sub_resource type="ShortCut" id=12]
+shortcut = SubResource( 11 )
+
+[sub_resource type="InputEventAction" id=13]
+action = "increase_time_factor"
+
+[sub_resource type="ShortCut" id=14]
+shortcut = SubResource( 13 )
+
+[sub_resource type="DynamicFontData" id=15]
+font_path = "res://Resources/Fonts/FontAwesome/otfs/Font Awesome 5 Free-Solid-900.otf"
+
+[sub_resource type="DynamicFont" id=16]
+font_data = SubResource( 15 )
+
+[sub_resource type="DynamicFontData" id=17]
+font_path = "res://Resources/Fonts/FredokaOne-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=18]
+font_data = SubResource( 17 )
+
+[sub_resource type="DynamicFont" id=19]
+size = 10
+font_data = SubResource( 5 )
+
+[sub_resource type="StyleBoxFlat" id=20]
+bg_color = Color( 1, 1, 1, 0.0980392 )
+
+[sub_resource type="InputEventAction" id=21]
+action = "toggle_performance_mode"
+
+[sub_resource type="ShortCut" id=22]
+shortcut = SubResource( 21 )
+
+[sub_resource type="InputEventAction" id=23]
+action = "toggle_vision_rays"
+
+[sub_resource type="ShortCut" id=24]
+shortcut = SubResource( 23 )
+
+[sub_resource type="StyleBoxFlat" id=25]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+
+[sub_resource type="DynamicFontData" id=26]
+font_path = "res://Resources/Fonts/FredokaOne-Regular.ttf"
+
+[sub_resource type="DynamicFont" id=27]
+font_data = SubResource( 26 )
+
+[sub_resource type="Gradient" id=28]
 offsets = PoolRealArray( 0.569507 )
 colors = PoolColorArray( 0.188235, 0.407843, 0.168627, 0.521569 )
 
-[sub_resource type="GradientTexture" id=30]
-gradient = SubResource( 31 )
+[sub_resource type="GradientTexture" id=29]
+gradient = SubResource( 28 )
 
-[sub_resource type="Gradient" id=24]
+[sub_resource type="Gradient" id=30]
 offsets = PoolRealArray( 0, 0.641256 )
 colors = PoolColorArray( 0, 0, 0, 0.803922, 0.0784314, 1, 0, 1 )
 
-[sub_resource type="GradientTexture" id=25]
-gradient = SubResource( 24 )
+[sub_resource type="GradientTexture" id=31]
+gradient = SubResource( 30 )
 width = 1024
 
-[sub_resource type="DynamicFont" id=36]
+[sub_resource type="DynamicFont" id=32]
 size = 22
 font_data = SubResource( 3 )
 
-[sub_resource type="Gradient" id=32]
+[sub_resource type="Gradient" id=33]
 offsets = PoolRealArray( 0.663677 )
 colors = PoolColorArray( 0.168627, 0.305882, 0.407843, 0.521569 )
 
-[sub_resource type="GradientTexture" id=33]
-gradient = SubResource( 32 )
+[sub_resource type="GradientTexture" id=34]
+gradient = SubResource( 33 )
 
-[sub_resource type="Gradient" id=26]
+[sub_resource type="Gradient" id=35]
 offsets = PoolRealArray( 0, 0.663677 )
 colors = PoolColorArray( 0, 0, 0, 0.709804, 0, 0.368627, 0.760784, 1 )
 
-[sub_resource type="GradientTexture" id=27]
-gradient = SubResource( 26 )
+[sub_resource type="GradientTexture" id=36]
+gradient = SubResource( 35 )
 width = 1024
 
-[sub_resource type="Gradient" id=34]
+[sub_resource type="Gradient" id=37]
 offsets = PoolRealArray( 1 )
 colors = PoolColorArray( 0.388235, 0.407843, 0.168627, 0.521569 )
 
-[sub_resource type="GradientTexture" id=35]
-gradient = SubResource( 34 )
+[sub_resource type="GradientTexture" id=38]
+gradient = SubResource( 37 )
 
-[sub_resource type="Gradient" id=28]
+[sub_resource type="Gradient" id=39]
 colors = PoolColorArray( 0, 0, 0, 0.364706, 0.898438, 1, 0, 1 )
 
-[sub_resource type="GradientTexture" id=29]
-gradient = SubResource( 28 )
+[sub_resource type="GradientTexture" id=40]
+gradient = SubResource( 39 )
 width = 1024
 
-[sub_resource type="InputEventAction" id=37]
-action = "take_control_of_focused_boppie"
-
-[sub_resource type="ShortCut" id=38]
-shortcut = SubResource( 37 )
-
-[sub_resource type="ShortCut" id=40]
-shortcut = SubResource( 39 )
-
 [sub_resource type="InputEventAction" id=41]
-action = "produce_and_focus_offspring"
+action = "take_control_of_focused_boppie"
 
 [sub_resource type="ShortCut" id=42]
 shortcut = SubResource( 41 )
 
-[sub_resource type="StyleBoxEmpty" id=47]
+[sub_resource type="ShortCut" id=43]
+shortcut = SubResource( 23 )
+
+[sub_resource type="InputEventAction" id=44]
+action = "produce_and_focus_offspring"
+
+[sub_resource type="ShortCut" id=45]
+shortcut = SubResource( 44 )
+
+[sub_resource type="StyleBoxEmpty" id=46]
 
 [node name="UI" type="CanvasLayer"]
 pause_mode = 2
@@ -286,9 +287,9 @@ pause_mode = 2
 margin_right = 26.0
 margin_bottom = 23.0
 hint_tooltip = "space"
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 8 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 22 )
+shortcut = SubResource( 10 )
 text = ""
 script = ExtResource( 16 )
 factor = 0.0
@@ -298,9 +299,9 @@ margin_left = 30.0
 margin_right = 56.0
 margin_bottom = 23.0
 hint_tooltip = "-"
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 8 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 17 )
+shortcut = SubResource( 12 )
 text = ""
 script = ExtResource( 16 )
 
@@ -321,12 +322,24 @@ margin_left = 81.0
 margin_right = 107.0
 margin_bottom = 23.0
 hint_tooltip = "+"
-custom_fonts/font = SubResource( 15 )
+custom_fonts/font = SubResource( 8 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 20 )
+shortcut = SubResource( 14 )
 text = ""
 script = ExtResource( 16 )
 factor = 2.0
+
+[node name="DebugContainer" type="HBoxContainer" parent="StatusBar/VBoxContainer/MarginContainer/HBoxContainer"]
+margin_left = 262.0
+margin_right = 287.0
+margin_bottom = 23.0
+
+[node name="DebugMessage" type="Label" parent="StatusBar/VBoxContainer/MarginContainer/HBoxContainer/DebugContainer"]
+margin_top = 4.0
+margin_right = 25.0
+margin_bottom = 18.0
+text = "test"
+script = ExtResource( 24 )
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="StatusBar/VBoxContainer/MarginContainer"]
 margin_left = 10.0
@@ -340,7 +353,7 @@ alignment = 2
 margin_left = 1862.0
 margin_right = 1890.0
 margin_bottom = 23.0
-custom_fonts/font = SubResource( 11 )
+custom_fonts/font = SubResource( 16 )
 toggle_mode = true
 text = ""
 script = ExtResource( 12 )
@@ -349,6 +362,9 @@ script = ExtResource( 12 )
 visible = true
 margin_right = 40.0
 margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="MarginContainer" type="MarginContainer" parent="StatusBar/VBoxContainer/MarginContainer/HBoxContainer2/HelpButton/HelpPopup"]
 margin_left = 4.0
@@ -376,7 +392,7 @@ rect_min_size = Vector2( 600, 600 )
 focus_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_fonts/normal_font = SubResource( 13 )
+custom_fonts/normal_font = SubResource( 18 )
 bbcode_enabled = true
 bbcode_text = "[center]Keybindings[/center]
 
@@ -401,6 +417,9 @@ custom_constants/margin_right = 10
 custom_constants/margin_top = 10
 custom_constants/margin_left = 10
 custom_constants/margin_bottom = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="VBoxContainer" type="VBoxContainer" parent="RightSidePanel"]
 margin_left = 10.0
@@ -419,7 +438,7 @@ TPS: ticks per second (physics/simulation)
 Target: what ratio of real seconds to simulation seconds is targeted
 Real: what ratio is actually achieved (due to performance limitations)"
 mouse_filter = 1
-custom_fonts/font = SubResource( 23 )
+custom_fonts/font = SubResource( 19 )
 text = "FPS"
 align = 2
 valign = 2
@@ -431,7 +450,7 @@ margin_right = 320.0
 margin_bottom = 440.0
 mouse_filter = 2
 size_flags_vertical = 0
-custom_styles/panel = SubResource( 9 )
+custom_styles/panel = SubResource( 20 )
 __meta__ = {
 "_editor_description_": ""
 }
@@ -679,7 +698,7 @@ hint_tooltip = "When on it disables: all particles, trap rotations and eye movem
 size_flags_horizontal = 3
 theme = ExtResource( 17 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 45 )
+shortcut = SubResource( 22 )
 text = "Fast rendering"
 script = ExtResource( 13 )
 
@@ -693,7 +712,7 @@ hint_tooltip = "Show vision rays for all boppies matching their 5 food input neu
 size_flags_horizontal = 3
 theme = ExtResource( 17 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 46 )
+shortcut = SubResource( 24 )
 text = "Show vision"
 script = ExtResource( 23 )
 
@@ -707,7 +726,7 @@ custom_constants/separation = 10
 margin_top = 175.0
 margin_right = 300.0
 margin_bottom = 349.0
-custom_styles/panel = SubResource( 43 )
+custom_styles/panel = SubResource( 25 )
 
 [node name="Boppie count" type="Control" parent="RightSidePanel/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/TabContainer"]
 pause_mode = 1
@@ -816,9 +835,9 @@ anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
 margin_right = -4.0
-margin_bottom = 231.0
+margin_bottom = -4.0
 rect_min_size = Vector2( 0, 400 )
-custom_fonts/font = SubResource( 8 )
+custom_fonts/font = SubResource( 27 )
 allow_reselect = true
 auto_height = true
 script = ExtResource( 11 )
@@ -838,7 +857,7 @@ margin_top = 10.0
 margin_right = 438.0
 margin_bottom = 221.0
 mouse_filter = 2
-custom_styles/panel = SubResource( 9 )
+custom_styles/panel = SubResource( 20 )
 
 [node name="InsideMargin" type="MarginContainer" parent="LeftSidePanel/PanelContainer"]
 margin_right = 428.0
@@ -911,8 +930,8 @@ rect_min_size = Vector2( 0, 24 )
 hint_tooltip = "Current boppie energy and max energy. When depleted the boppie dies (unless invincible). On the right is the number of apples eaten by the boppie."
 step = 0.0
 value = 100.0
-texture_under = SubResource( 30 )
-texture_progress = SubResource( 25 )
+texture_under = SubResource( 29 )
+texture_progress = SubResource( 31 )
 nine_patch_stretch = true
 
 [node name="HealthBarContainer" type="HBoxContainer" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/HealthProgressBar"]
@@ -932,7 +951,9 @@ custom_fonts/font = SubResource( 4 )
 text = "  "
 valign = 2
 
-[node name="Cross" type="Label" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/HealthProgressBar/HealthBarContainer/DeathIcon" groups=["ShowWhenInvincible"]]
+[node name="Cross" type="Label" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/HealthProgressBar/HealthBarContainer/DeathIcon" groups=[
+"ShowWhenInvincible",
+]]
 modulate = Color( 1, 0, 0, 1 )
 margin_left = -3.0
 margin_top = -3.0
@@ -940,7 +961,7 @@ margin_right = 30.0
 margin_bottom = 20.0
 hint_tooltip = "Death"
 mouse_filter = 1
-custom_fonts/font = SubResource( 36 )
+custom_fonts/font = SubResource( 32 )
 text = "  "
 valign = 2
 script = ExtResource( 20 )
@@ -983,8 +1004,8 @@ rect_min_size = Vector2( 0, 24 )
 hint_tooltip = "Current boppie water and max water capacity. When depleted the boppie dies (unless invincible)."
 step = 0.0
 value = 100.0
-texture_under = SubResource( 33 )
-texture_progress = SubResource( 27 )
+texture_under = SubResource( 34 )
+texture_progress = SubResource( 36 )
 nine_patch_stretch = true
 
 [node name="WaterBarContainer" type="HBoxContainer" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/WaterProgressBar"]
@@ -1004,7 +1025,9 @@ custom_fonts/font = SubResource( 4 )
 text = "  "
 valign = 2
 
-[node name="Cross" type="Label" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/WaterProgressBar/WaterBarContainer/DeathIcon" groups=["ShowWhenInvincible"]]
+[node name="Cross" type="Label" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/WaterProgressBar/WaterBarContainer/DeathIcon" groups=[
+"ShowWhenInvincible",
+]]
 modulate = Color( 1, 0, 0, 1 )
 margin_left = -3.0
 margin_top = -4.0
@@ -1012,7 +1035,7 @@ margin_right = 30.0
 margin_bottom = 19.0
 hint_tooltip = "Death"
 mouse_filter = 1
-custom_fonts/font = SubResource( 36 )
+custom_fonts/font = SubResource( 32 )
 text = "  "
 valign = 2
 script = ExtResource( 20 )
@@ -1049,8 +1072,8 @@ On the left the boppie size is shown in [brackets], then the current stage.
 On the right its generation and how many children it has is shown."
 step = 0.0
 value = 100.0
-texture_under = SubResource( 35 )
-texture_progress = SubResource( 29 )
+texture_under = SubResource( 38 )
+texture_progress = SubResource( 40 )
 nine_patch_stretch = true
 
 [node name="OffspringBarContainer" type="HBoxContainer" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/OffspringProgressBar"]
@@ -1144,7 +1167,7 @@ size_flags_horizontal = 3
 theme = ExtResource( 17 )
 toggle_mode = true
 shortcut_in_tooltip = false
-shortcut = SubResource( 38 )
+shortcut = SubResource( 42 )
 text = "Take Control"
 script = ExtResource( 18 )
 
@@ -1157,7 +1180,7 @@ grow_vertical = 0
 hint_tooltip = "Whether the boppie can die"
 theme = ExtResource( 17 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 40 )
+shortcut = SubResource( 43 )
 text = "Invincible"
 script = ExtResource( 19 )
 
@@ -1169,7 +1192,7 @@ hint_tooltip = "Produce offspring, mutate its DNA and then move focus to it"
 size_flags_horizontal = 3
 theme = ExtResource( 17 )
 shortcut_in_tooltip = false
-shortcut = SubResource( 42 )
+shortcut = SubResource( 45 )
 text = "Offspring"
 script = ExtResource( 21 )
 
@@ -1197,15 +1220,17 @@ size_flags_vertical = 12
 
 [node name="Neural network" type="PanelContainer" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/TabContainer"]
 visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
 margin_left = 4.0
 margin_top = 32.0
-margin_right = 404.0
-margin_bottom = 182.0
+margin_right = -4.0
+margin_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 0
 rect_min_size = Vector2( 400, 150 )
 mouse_filter = 2
-custom_styles/panel = SubResource( 47 )
+custom_styles/panel = SubResource( 46 )
 script = ExtResource( 7 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation/TabContainer/Neural network"]
@@ -1291,7 +1316,6 @@ wrap_enabled = true
 caret_blink = true
 
 [node name="Tween" type="Tween" parent="LeftSidePanel/PanelContainer/InsideMargin/BoppieInformation"]
-
 [connection signal="pressed" from="StatusBar/VBoxContainer/MarginContainer/HBoxContainer/TimeScaleContainer/PauseSpeedButton" to="StatusBar/VBoxContainer/MarginContainer/HBoxContainer/TimeScaleContainer/PauseSpeedButton" method="_on_ChangeSpeedButton_pressed"]
 [connection signal="pressed" from="StatusBar/VBoxContainer/MarginContainer/HBoxContainer/TimeScaleContainer/DecreaseSpeedButton" to="StatusBar/VBoxContainer/MarginContainer/HBoxContainer/TimeScaleContainer/DecreaseSpeedButton" method="_on_ChangeSpeedButton_pressed"]
 [connection signal="pressed" from="StatusBar/VBoxContainer/MarginContainer/HBoxContainer/TimeScaleContainer/IncreaseSpeedButton" to="StatusBar/VBoxContainer/MarginContainer/HBoxContainer/TimeScaleContainer/IncreaseSpeedButton" method="_on_ChangeSpeedButton_pressed"]

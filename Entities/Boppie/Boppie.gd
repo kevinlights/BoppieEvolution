@@ -19,7 +19,7 @@ var food_type = Data.FoodType.MEAT
 var max_energy = 15 # 自身最大能量
 var max_water = 10 # 最大含水量
 var required_offspring_energy = 10 # 产生后代的能量
-var ray_count_additional := 2
+var ray_count_additional := 2 # 除了正前方一条射线外，两侧额外两来 2 对射线，一共 5 条射线
 
 # DNA
 var move_speed := 85.0
@@ -94,7 +94,7 @@ var selected = false setget set_selected
 var hovered = false setget set_hovered
 
 # Drawing
-enum BodyType {ROUND, HEXAGONAL}
+enum BodyType {ROUND, HEXAGONAL} # 圆形身体或六边形身体
 var draw_body_type =  BodyType.ROUND
 var draw_ears = false
 var draw_eyebrows = false
@@ -130,12 +130,12 @@ signal DrawSenses(new_value)
 # Init and draw
 # ==========================================================================
 
-func _init(ai=null):
+func _init(_ai=null):
 	# color.connect("ColorUpdated", self, "_on_colorUpdated")
-	if ai == null:
-		ai = NeuralNetwork.new(InnovationManager.common_innovation_ids)
-	nn_input_array = ai.values
-	self.ai = ai
+	if _ai == null:
+		_ai = NeuralNetwork.new(InnovationManager.common_innovation_ids)
+	nn_input_array = _ai.values
+	self.ai = _ai
 	add_child(timer_neuron)
 	randomize_dna()
 	
@@ -231,10 +231,11 @@ func get_fancy_dna_str():
 # Meat tolerance
 # ==========================================================================
 	
+# 肉食容忍度，通过更新容忍度，来对个体进行变更，并对视线碰撞掩码层进行调整
 func set_meat_tolerance(tolerance):
 	meat_tolerance = tolerance
-	var for_carrion = 0.3
-	var for_live_meat = 0.7
+	var for_carrion = 0.3 # 腐肉，生物自然死亡后的肉
+	var for_live_meat = 0.7 # 新鲜肉？直接捕食获取的肉
 	var bitmask = 0
 	if tolerance < for_carrion:
 		bitmask = Globals.PLANT_BIT
@@ -243,10 +244,10 @@ func set_meat_tolerance(tolerance):
 		draw_body_type = BodyType.HEXAGONAL
 	elif for_live_meat <= tolerance:
 		bitmask = Globals.MEAT_BIT
-		draw_teeth = true
+		draw_teeth = true # 完全的肉食向，画出牙齿，眉毛
 		draw_body_type = BodyType.HEXAGONAL
 		draw_eyebrows = true
-		
+	# 更新射线的碰撞掩码层
 	collision_mask -= collision_mask & (Globals.PLANT_BIT | Globals.MEAT_BIT)
 	collision_mask |= bitmask
 	for vision_ray in vision_rays:
@@ -259,6 +260,7 @@ func set_meat_tolerance(tolerance):
 # Rays
 # ==========================================================================
 
+# 初始化射线，开始角度为 0，随后根据射线数量在两侧每隔 20 度逐次添加新射线
 func initialize_rays():
 	var start_angle = 0
 	add_ray(start_angle, true, $VisionRay)
@@ -267,6 +269,7 @@ func initialize_rays():
 		add_ray(start_angle - ray_angle * i, true)
 	set_meat_tolerance(meat_tolerance)
 	
+# 添加射线
 func add_ray(angle_radians, push_back=true, ray=null):
 	if ray == null:
 		ray = $VisionRay.duplicate()
@@ -277,6 +280,7 @@ func add_ray(angle_radians, push_back=true, ray=null):
 	else:
 		self.vision_rays.push_front(ray)
 	
+# 设置绘制传感器
 func set_draw_senses(value):
 	draw_senses = value
 	emit_signal("DrawSenses", draw_senses)
@@ -285,12 +289,13 @@ func set_draw_senses(value):
 # AI
 # ==========================================================================
 
-func add_temp_ai(ai):
-	temp_ai = ai
+func add_temp_ai(_ai):
+	temp_ai = _ai
 	
 func pop_temp_ai():
 	temp_ai = null
-	
+
+# 计算 AI 输入，根据不同传感器的数据，生成对应的输入数组，用于神经网络计算
 func calculate_ai_input(delta):
 	var index
 	var loss = 1.0 - delta * 10
@@ -336,21 +341,21 @@ func calculate_ai_input(delta):
 # ==========================================================================
 
 func _draw():
-	if selected:
+	if selected: # 被选中时，画出波比身体周围的 4 个直角表示选中状态
 		draw_selection()
 	match draw_body_type:
 		BodyType.ROUND: draw_round_body()
 		BodyType.HEXAGONAL: draw_hexagonal_body()
 	if draw_ears:
-		draw_ears()
+		do_draw_ears()
 
 func draw_corner(corner: Vector2, add: Vector2):
 	var offset = 3
-	var color = Color(1, 0, 0)
+	var _color = Color(1, 0, 0)
 	var from = corner + add * offset
 	var length = (radius + offset * 2) / 3
-	draw_line(from, from - Vector2(add.x, 0) * length, color, 2, true)
-	draw_line(from, from - Vector2(0, add.y) * length, color, 2, true)
+	draw_line(from, from - Vector2(add.x, 0) * length, _color, 2, true)
+	draw_line(from, from - Vector2(0, add.y) * length, _color, 2, true)
 	
 func draw_selection():
 	for x in [-1, 1]:
@@ -358,7 +363,7 @@ func draw_selection():
 			var corner = Vector2(x, y) * radius
 			draw_corner(corner, Vector2(x, y))
 	
-func _get_hexagon(size, center=Vector2.ZERO):
+func _get_hexagon(size, _center=Vector2.ZERO):
 	var points = []
 	for deg in range(30, 360, 60):
 		points.append(Vector2(cos(deg2rad(deg)), sin(deg2rad(deg))) * size)
@@ -383,7 +388,7 @@ func draw_round_body():
 	draw_circle(Vector2.ZERO, radius, boppie_color.darkened(.4))
 	draw_circle(Vector2.ZERO, radius - armor, boppie_color)
 		
-func draw_ears():
+func do_draw_ears():
 	var ears_start_point = Vector2(0, -15)
 	var ears_end_point = Vector2(0, 18)
 	var adjust = Vector2(-radius+armor, 0)
@@ -397,6 +402,7 @@ func set_selected(select):
 func set_hovered(new_value):
 	if hovered != new_value:
 		hovered = new_value
+		# 鼠标移到波比身上，变暗 0.3
 		self.modulate = self.modulate.darkened(.3) if hovered else Color.white
 		
 func current_boppie_color(value):
@@ -411,7 +417,7 @@ func current_boppie_color(value):
 func rotation_vector():
 	return Vector2(cos(self.rotation), sin(self.rotation))
 
-func move(factor, delta):
+func move(factor, _delta):
 	var rot = rotation_vector()
 	$Face.scale_eyes(factor)
 	var armor_factor = (10 - armor) / 10 # 护甲越大，移动速度越慢
@@ -426,16 +432,20 @@ func turn(factor, delta):
 	
 func _physics_process(delta):
 	if not self.dead:
+		# 更新能量和水份
 		update_energy(-delta * energy_consumption_existing * no_food_eaten_penalty)
 		update_water(-delta * water_consumption_existing * no_food_eaten_penalty)
 		if (water >= 0 and energy >= 0) or not can_die:
 			var curr_ai = ai if temp_ai == null else temp_ai
 			if curr_ai:
-				calculate_ai_input(delta)
+				# Globals.debugMsg(ai)
+				calculate_ai_input(delta) # 获取神经网络的输入数组
+				# TODO: 如何传入上一步构建的输入数组，来进行神经网络的计算
 				movement = clamp(curr_ai.get_movement_factor(), max_backwards_factor, max_boost_factor)
 				var turn = curr_ai.get_turn_factor()
 				# Flip turning when movement is backwards
 				turn = clamp(turn * turn_speed, -1, 1) * (1 if movement >= 0 else -1)
+				# 移动消耗能量
 				update_energy(-delta * movement * movement * energy_consumption_walking)
 				self.move(movement, delta)
 				self.turn(turn, delta)
@@ -443,6 +453,7 @@ func _physics_process(delta):
 				ai.get_movement_factor()
 		else:
 			die()
+		# 根据身体能量更新波比的颜色
 		self.self_modulate = current_boppie_color(self.energy / (max_energy * .7))
 		$WalkingParticles.modulate = self_modulate
 		$Face.get_node("AboveFace").self_modulate = self_modulate

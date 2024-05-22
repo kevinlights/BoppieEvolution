@@ -208,35 +208,35 @@ func take_control_of_boppie(boppie):
 		controlled_boppie.set_selected(true)
 
 
-func _process(delta):
+func _process(_delta):
 	check_boppies()
 	if controlled_boppie != null:
 		$Camera.global_position = controlled_boppie.global_position
 	else:
 		$Camera.global_position -= Utils.input_vectors() * 7
 
-	
+# 输入处理方法	
 func _unhandled_input(event):
-	if event.is_action_pressed("cancel"):
+	if event.is_action_pressed("cancel"): # 取消控制波比
 		take_control_of_boppie(null)
-	if event.is_action_pressed("add_energy_to_focused_boppie"):
+	if event.is_action_pressed("add_energy_to_focused_boppie"): # 手动给波比增加能量
 		if controlled_boppie:
 			controlled_boppie.update_energy(5)
 			controlled_boppie.update_water(5)
-	if event.is_action_pressed("toggle_vision_rays_of_focused_boppie"):
+	if event.is_action_pressed("toggle_vision_rays_of_focused_boppie"): # 显示射线
 		Globals.draw_current_senses = !Globals.draw_current_senses
 		if controlled_boppie != null:
 			controlled_boppie.draw_senses = Globals.draw_current_senses
-	if event.is_action_pressed("set_time_factor_to_2^(number-1)"):
+	if event.is_action_pressed("set_time_factor_to_2^(number-1)"): # 加快时间
 		var new_time_scale = 1 << (event.scancode - KEY_1)
 		change_time_scale(new_time_scale / Engine.time_scale)
-	if event.is_action_pressed("save_simulation"):
+	if event.is_action_pressed("save_simulation"): # 保存
 		$SaveDialog.show(true)
-	if event.is_action_pressed("load_simulation"):
+	if event.is_action_pressed("load_simulation"): # 加载
 		$SaveDialog.show(false)
 	if event.is_action_pressed("follow_fittest_boppie_after_death"):
 		set_follow_fittest_boppie(!follow_fittest_boppie)
-	if event.is_action_pressed("follow_fittest_owlie"):
+	if event.is_action_pressed("follow_fittest_owlie"): # 跟随适应度最高的波比，
 		take_control_of_fittest_boppie_in_group("Owlie")
 	if event.is_action_pressed("follow_fittest_kloppie"):
 		take_control_of_fittest_boppie_in_group("Kloppie")

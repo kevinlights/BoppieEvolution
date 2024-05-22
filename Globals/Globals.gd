@@ -18,7 +18,7 @@ var icon_font = DynamicFont.new()
 const MEAT_BIT = 1<<10
 const PLANT_BIT = 1<<9
 
-signal FoodEaten(Food)
+# signal FoodEaten(Food)
 signal DebugMessage(msg)
 
 var color = Color(1, 0, 0)
@@ -29,7 +29,7 @@ func add_food(food_type, add=1):
 	food_counts[food_type] += add
 
 func _init():
-	for i in range(len(Data.FoodType.keys())):
+	for _i in range(len(Data.FoodType.keys())):
 		food_counts.append(0)
 
 func _ready():
@@ -55,6 +55,7 @@ var last_emit_time = 0
 
 func _process(delta):
 	elapsed_time += delta
+	# Globals.debugMsg(elapsed_time)
 	if last_emit_time + 500 < OS.get_ticks_msec():
 		last_emit_time = OS.get_ticks_msec()
 		emit_signal("HalfSecondTimer")

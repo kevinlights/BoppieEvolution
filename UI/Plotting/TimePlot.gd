@@ -12,11 +12,11 @@ class Dataset:
 	var stderr_points_above = []
 	var stderr_points_below = []
 	
-	func _init(name, color = Color.white, max_points = 1000, plot_stderr=false):
-		self.name = name
-		self.color = color
-		self.max_points = max_points
-		self.plot_stderr = plot_stderr
+	func _init(_name, _color = Color.white, _max_points = 1000, _plot_stderr=false):
+		self.name = _name
+		self.color = _color
+		self.max_points = _max_points
+		self.plot_stderr = _plot_stderr
 
 	func add_point(y, stderr=0):
 		self.points.push_back(Vector2(x_counter, y))

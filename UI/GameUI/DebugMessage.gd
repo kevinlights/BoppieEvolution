@@ -17,4 +17,4 @@ func _ready():
 
 
 func _on_DebugMessage_PrintDebug(msg):
-	text = msg
+	text = str(msg)

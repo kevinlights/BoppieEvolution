@@ -6,6 +6,7 @@ onready var game_controller = get_tree().get_nodes_in_group("GameController")[0]
 # use this state variable to avoid it. 
 var no_pressed_callback = false
 
+# 切换无敌模式
 func _on_BoppieInvincibilityChanged(new_boppie, is_invincible):
 	no_pressed_callback = true
 	pressed = is_invincible

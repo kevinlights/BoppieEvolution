@@ -33,9 +33,9 @@ var lookup_boppie_type_to_config = {}
 # Simulation settings
 export var max_food_count = 150
 export var food_per_500ms = 7
-export var spawn_food_on_death = true
+export var spawn_food_on_death = true # 死亡后生成食物
 export var keep_n_fittest_boppies = 30
-export var kloppies_cannibals = false
+export var kloppies_cannibals = false # 同类相食
 export var number_of_lakes = 1
 
 # Game size
@@ -88,11 +88,12 @@ func random_empty_world_coordinate():
 func random_game_coordinate():
 	return random_coordinate() * total_size
 
-func is_within_game(pos: Vector2):
+func is_within_game(pos: Vector2): # 是否在游戏界面中
 	return (world_zone_start.x <= pos.x and pos.x <= world_zone_end.x
 			and world_zone_start.y <= pos.y and pos.y <= world_zone_end.y)
 	
-func make_within_game(pos: Vector2):
+# 确保生物不会移出地图范围
+func make_within_game(pos: Vector2): # 基于地图进行位置调整，如果从底部移动出去，则重新从顶部进入，从右侧移动出去，则重新从左侧进入
 	return Vector2(fposmod(pos.x, total_width), fposmod(pos.y, total_height))
 	
 func get_mouse_world_coords():
@@ -119,15 +120,15 @@ func _ready():
 	add_lakes()
 	Globals.kloppies_cannibals = kloppies_cannibals
 	for boppie in get_tree().get_nodes_in_group("Boppie"):
-		handle_boppie(boppie)
-	$Camera.position = total_size / 2
+		handle_boppie(boppie) # 对当前环境中的波比进行事件绑定
+	$Camera.position = total_size / 2 # 摄像机位于界面中心
 	if food_per_500ms > 0:
 		$FoodTimer.connect("timeout", self, "_reset_food_timer")
 	for config in boppie_configurations:
 		lookup_boppie_type_to_config[config.group] = config
 	connect("SpawnNewBoppie", self, "_on_SpawnNewBoppie")
 		
-func _reset_food_timer():
+func _reset_food_timer(): # 生成食物
 	spawn_food(food_per_500ms * 2)
 #	print(unused_food_stack_index)
 #	var new_index = max(0, unused_food_stack_index - food_per_100ms)
@@ -136,32 +137,33 @@ func _reset_food_timer():
 #		unused_food_stack[i].reset()
 #	unused_food_stack_index = new_index
 		
-		
+
+# 波比的事件绑定	
 func handle_boppie(boppie):
 	for signal_name in ["Clicked", "Died", "Offspring"]:
 		boppie.connect("Boppie" + signal_name, self, "_on_Boppie" + signal_name)
 	boppie.update()
 		
-func _on_SpawnNewBoppie(at, dna):
+func _on_SpawnNewBoppie(at, dna): # 添加新波比 或陷阱
 	add_boppie(at, boppie_configurations[0].scene, dna)
 
 func add_boppie(at: Vector2, scene: PackedScene, dna=null, dna2=null):
 	var instance = scene.instance()
 	if instance is Boppie:
 		if dna != null:
-			instance.set_dna(dna, 1, dna2)
+			instance.set_dna(dna, 1, dna2) # 对波比设置 DNA
 		handle_boppie(instance)
-	instance.rotation = Globals.rng.randf() * 2 * PI
+	instance.rotation = Globals.rng.randf() * 2 * PI # 随机朝向
 	add_child(instance)
 	instance.set_owner(self)
-	instance.global_position = at
+	instance.global_position = at # 设置位置
 	if control_newest_boppie:
 		control_newest_boppie = false
-		take_control_of_boppie(instance)
+		take_control_of_boppie(instance) # 控制最新波比
 	return instance
 
 
-func add_random_boppies(count: int, config: BoppieConfiguration):
+func add_random_boppies(count: int, config: BoppieConfiguration): # 添加随机波比
 	for _i in range(count):
 		var dna1 = null
 		var dna2 = null
@@ -250,6 +252,7 @@ func produce_and_focus_offspring():
 		controlled_boppie.produce_offspring()
 		control_newest_boppie = true
 		
+# 无敌模式下生物不会死亡
 func toggle_controlled_boppie_invincibility(new_value=null):
 	var is_invincible = false
 	if controlled_boppie != null:
@@ -292,6 +295,7 @@ func take_control_of_fittest_boppie_in_group(group):
 	set_follow_fittest_boppie(true)
 	take_control_of_boppie(find_fittest_in_group(group))
 
+# 使用引擎来更改游戏运行速度
 func change_time_scale(factor):
 	var new_time_scale = Engine.time_scale * factor
 	if .5 <= new_time_scale and new_time_scale <= 256 and new_time_scale != Engine.time_scale:
@@ -300,7 +304,8 @@ func change_time_scale(factor):
 		if new_time_scale >= 64:
 			Globals.performance_mode = true
 		emit_signal("EngineTimeScaleChange", factor)
-			
+
+# 检查生物，如位置，困难度，随机补充生物数量到最小数量		
 func check_boppies():
 	for config in boppie_configurations:
 		var boppies = get_tree().get_nodes_in_group(config.group)

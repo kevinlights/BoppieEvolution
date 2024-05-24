@@ -7,8 +7,7 @@ extends Label
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	var g = Globals.debugConn()
-	g.connect("DebugMessage", self, "_on_DebugMessage_PrintDebug")
+	Globals.connect("DebugMessage", self, "_on_DebugMessage_PrintDebug")
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

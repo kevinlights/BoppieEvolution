@@ -6,7 +6,7 @@ var width := 400.0
 var neuron_radius := 14
 var margins = neuron_radius * 3
 var neuron_dist = neuron_radius * 2.2
-var font = get_font("font") 
+var font = get_font("font")
 var neuron_weight_gradient: Gradient = load("res://UI/GameUI/NeuronWeight.tres")
 var neuron_activation_gradient: Gradient = load("res://UI/GameUI/NeuronActivation.tres")
 var neuron_importance_gradient: Gradient = load("res://UI/GameUI/NeuronImportance.tres")
@@ -17,8 +17,8 @@ var focused_neuron_index = -1
 var default_connection_color = Color("1dffffff")
 var dragging_neuron = false
 
-enum DisplayProfile { ACTIVATIONS, WEIGHTS, IMPORTANCE } # , IMPORTANCE
-var profile = DisplayProfile.ACTIVATIONS
+enum DisplayProfile {ACTIVATIONS, WEIGHTS, IMPORTANCE} # , IMPORTANCE 切换显示类型
+var profile = DisplayProfile.ACTIVATIONS # 默认显示激活情况
 
 # Colors
 var default_neuron_color = Color.darkolivegreen
@@ -41,7 +41,6 @@ var neuron_colors = {
 	"Turn": Color.darkcyan,
 }
 
-
 func get_neuron_color(index, value):
 	var name = Data.generalize_neuron_name(neural_network.neuron_index_to_name[index])
 	var color = neuron_colors.get(name, default_neuron_color)
@@ -59,7 +58,7 @@ func calculate_depth_map():
 			continue
 		depth_map[connection[0]] = 1
 		for i in range(0, len(connection[1]), 3):
-			depth_map[connection[0]] = max(depth_map[connection[1][i]]+1, depth_map[connection[0]])
+			depth_map[connection[0]] = max(depth_map[connection[1][i]] + 1, depth_map[connection[0]])
 		max_depth = max(max_depth, depth_map[connection[0]])
 	for connection in InnovationManager.nn_output_neurons:
 		depth_map[neural_network.neuron_name_to_index[connection]] = max_depth + 1
@@ -67,8 +66,7 @@ func calculate_depth_map():
 	for key in depth_map:
 		while layers.size() < depth_map[key]:
 			layers.append([])
-		layers[depth_map[key]-1].append(key)
-				
+		layers[depth_map[key] - 1].append(key)
 
 func _ready():
 	self.rect_min_size = Vector2(width, height)
@@ -101,13 +99,13 @@ func _draw():
 	var xs = []
 	var start_ys = []
 	var neuron_dists = []
-	var neuron_importance_sums = {-1: 1}
+	var neuron_importance_sums = { - 1: 1}
 	
 	# Calculate offsets
 	for layer in range(layers.size()):
 		xs.append(margins + layer * inside_width / (layers.size() - 1))
 		neuron_dists.append(neuron_dist + max(0, 10 - len(layers[layer])) * 10)
-		start_ys.append(margins + (inside_height / 2) - ((layers[layer].size() - 1) * neuron_dists[-1]) / 2)
+		start_ys.append(margins + (inside_height / 2) - ((layers[layer].size() - 1) * neuron_dists[ - 1]) / 2)
 		
 	# Neuron index to position lookup
 	if not lookup_index_to_pos:
@@ -121,38 +119,36 @@ func _draw():
 		var right_pos = lookup_index_to_pos[connection[0]]
 		for i in range(0, len(connection[1]), 3):
 			var left_pos = lookup_index_to_pos[connection[1][i]]
-			var weight = connection[1][i+1]
+			var weight = connection[1][i + 1]
 			var dendron = weight * values[connection[1][i]]
 			var thickness = 0.2
 			var color = default_connection_color
-			if focused_neuron_index == connection[0] or focused_neuron_index == -1:
+			if focused_neuron_index == connection[0] or focused_neuron_index == - 1:
 				match profile:
-					DisplayProfile.ACTIVATIONS: 
+					DisplayProfile.ACTIVATIONS: # 绘制激活情况
 						thickness = dendron
 						color = neuron_activation_gradient.interpolate((thickness + 1) / 2.0)
-					DisplayProfile.WEIGHTS: 
+					DisplayProfile.WEIGHTS:
 						thickness = weight
 						color = neuron_weight_gradient.interpolate((thickness + 1) / 2.0)
-					DisplayProfile.IMPORTANCE: 
-						thickness = connection[1][i+2]
+					DisplayProfile.IMPORTANCE:
+						thickness = connection[1][i + 2]
 						neuron_importance_sums[connection[1][i]] = thickness + neuron_importance_sums.get(connection[1][i], 0)
 						color = neuron_importance_gradient.interpolate(thickness)
-				if focused_neuron_index != -1:
+				if focused_neuron_index != - 1:
 					# var mid_pos = left_pos * 0.85 + right_pos * 0.15
 					var mid_pos = left_pos + Vector2(neuron_radius * 1.5, 3)
 					var color_opaque = Color(color.r, color.g, color.b, 1)
 					draw_string(font, mid_pos, str(round(thickness * 100) / 100.0), color_opaque)
-			draw_line(left_pos, right_pos, color, abs(thickness * 3))
-			
-
+			draw_line(left_pos, right_pos, color, abs(thickness * 3)) # 从输入到输出画一条线，颜色和粗细根据选择的类型自动调整
 	
 	# Draw neurons
 	for index in lookup_index_to_pos:
 		var pos = lookup_index_to_pos[index]
-		var text_pos = pos + Vector2(-neuron_radius * .7, neuron_radius * .4)
+		var text_pos = pos + Vector2( - neuron_radius * .7, neuron_radius * .4)
 		var color = get_neuron_color(index, values[index])
-		if focused_neuron_index == index and focused_neuron_index != -1:
-			draw_circle(pos, neuron_radius*1.1, Color.white)
+		if focused_neuron_index == index and focused_neuron_index != - 1:
+			draw_circle(pos, neuron_radius * 1.1, Color.white)
 		var curr_neuron_radius = neuron_radius
 		match profile:
 			DisplayProfile.IMPORTANCE:
@@ -164,7 +160,7 @@ func _draw():
 	# Calculate positions of help-banners explaining neuron meaning
 	var input_neurons = neural_network.neuron_index_to_name
 	var neuron_group_ranges = Dictionary()
-	for layer_index in [0, -1]:
+	for layer_index in [0, - 1]:
 		var first_index = 0
 		var layer = layers[layer_index]
 		for index in range(0, len(layer)):
@@ -185,7 +181,7 @@ func _draw():
 	for text in neuron_group_ranges:
 		var upper_lower_pos = neuron_group_ranges[text]
 		draw_line(upper_lower_pos[0], upper_lower_pos[1], Color(1, 1, 1), 1, true)
-		var divets =  Vector2(-8, 0) * upper_lower_pos[2]
+		var divets = Vector2( - 8, 0) * upper_lower_pos[2]
 		draw_line(upper_lower_pos[0], upper_lower_pos[0] + divets, Color(1, 1, 1), 1, true)
 		draw_line(upper_lower_pos[1], upper_lower_pos[1] + divets, Color(1, 1, 1), 1, true)
 		
@@ -193,8 +189,8 @@ func _draw():
 	for text in neuron_group_ranges:
 		var upper_lower_pos = neuron_group_ranges[text]
 		var text_pos = (upper_lower_pos[0] + upper_lower_pos[1]) / 2
-		text_pos -= Vector2(-3, 7 * len(text) / 2) * upper_lower_pos[2]
-		draw_set_transform(text_pos, upper_lower_pos[2] * PI/2, Vector2.ONE)
+		text_pos -= Vector2( - 3, 7 * len(text) / 2) * upper_lower_pos[2]
+		draw_set_transform(text_pos, upper_lower_pos[2] * PI / 2, Vector2.ONE)
 		draw_string(font, Vector2.ZERO, text)
 
 func _input(event):
@@ -206,11 +202,10 @@ func _input(event):
 				if conn[0] in lookup_index_to_pos:
 					if mouse.distance_to(lookup_index_to_pos[conn[0]]) < neuron_radius * 1.2:
 						focused_neuron_index = conn[0]
-		if focused_neuron_index != -1 and dragging_neuron:
+		if focused_neuron_index != - 1 and dragging_neuron:
 			lookup_index_to_pos[focused_neuron_index] = mouse
 	if event is InputEventMouseButton and neural_network:
 		if dragging_neuron and event.button_mask == 0:
 			dragging_neuron = false
-		elif focused_neuron_index != -1:
+		elif focused_neuron_index != - 1:
 			dragging_neuron = true
-		

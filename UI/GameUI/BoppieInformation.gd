@@ -33,7 +33,7 @@ func _on_BoppieControlChanged(controlled_boppie):
 			Tween.TRANS_ELASTIC, Tween.EASE_OUT
 		)
 		$Tween.start()
-	if should_open:
+	if should_open: # 将波比的 AI 数据交给神经网络界面渲染
 		neurons.neural_network = boppie.ai
 		if different_boppie:
 			_on_Show_toggled(true)

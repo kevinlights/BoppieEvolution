@@ -83,7 +83,8 @@ class Coloration:
 		
 	func _to_string() -> String:
 		return "[Coloration]"
-		
+
+# 为了在遗传算法或神经网络模拟中提供一种可以随时间变化的计时器，其中包含了变异和交叉的功能，这些功能在遗传算法中用于生成新的种群	
 class NeuronTimer:
 	extends Timer
 	func _init():

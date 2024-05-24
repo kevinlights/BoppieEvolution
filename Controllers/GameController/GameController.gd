@@ -147,16 +147,20 @@ func handle_boppie(boppie):
 func _on_SpawnNewBoppie(at, dna): # 添加新波比 或陷阱
 	add_boppie(at, boppie_configurations[0].scene, dna)
 
+# 生成个体的核心方法
 func add_boppie(at: Vector2, scene: PackedScene, dna=null, dna2=null):
-	var instance = scene.instance()
+	var instance = scene.instance() # 场景的实例化
 	if instance is Boppie:
 		if dna != null:
 			instance.set_dna(dna, 1, dna2) # 对波比设置 DNA
-		handle_boppie(instance)
+		handle_boppie(instance) # 绑定事件
 	instance.rotation = Globals.rng.randf() * 2 * PI # 随机朝向
 	add_child(instance)
 	instance.set_owner(self)
 	instance.global_position = at # 设置位置
+	Globals.debugMsg("add boppie")
+	Globals.debugMsg(at.x)
+	Globals.debugMsg(at.y)
 	if control_newest_boppie:
 		control_newest_boppie = false
 		take_control_of_boppie(instance) # 控制最新波比

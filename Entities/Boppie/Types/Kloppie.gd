@@ -14,7 +14,7 @@ func _init():
 	draw_nose = true
 	draw_eyes = true
 	draw_eyebrows = true
-	eats = Data.Raytype.KLOPPIE if Globals.kloppies_cannibals else Data.Raytype.OWLIE
+	eats = Data.Raytype.KLOPPIE if Globals.kloppies_cannibals else Data.Raytype.OWLIE # 吃同类还是吃猫头鹰
 	max_boost_factor = 3.0
 	# max_energy = 40
 	# ray_length = 500

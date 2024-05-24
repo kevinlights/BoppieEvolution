@@ -51,6 +51,7 @@ func initalize_senses_indeces_lookup():
 			if Data.generalize_neuron_name(name) == config.string:
 				sense_bit_to_index[sense_bit] = min(sense_bit_to_index.get(sense_bit, 1e9), index)
 
+# 重新计算内部连接
 func recalculate_internal_connections():
 	self.connections_internal.clear() # = []
 	self.neuron_name_to_index.clear() # = {}
@@ -67,7 +68,7 @@ func recalculate_internal_connections():
 					values.append(int(input == "Bias"))
 	for key in neuron_name_to_index:
 		neuron_index_to_name[neuron_name_to_index[key]] = key
-	move_value_index = neuron_name_to_index["Move"]
+	move_value_index = neuron_name_to_index["Move"] # 获取移动和转向的索引
 	turn_value_index = neuron_name_to_index["Turn"]
 			
 	for output in dna.connections:
@@ -95,6 +96,7 @@ func add_innovation_to_dictionary(innovation_id):
 		dna.connections[output] = {"Bias": random_weight()}
 	dna.connections[output][input] = random_weight()
 	
+# 将两个创新列表合并到一个 DNA 结构中，这可能是用于遗传算法中神经网络结构的演化。通过合并，方法创建了一个新的神经网络结构，其中包含了两个父结构的特征
 func make_and_merge_nns(fitter_innovations, other_innovations=[]):
 	if other_innovations == null:
 		other_innovations = []
@@ -265,17 +267,18 @@ func mutate_weights(mutability):
 func relu(num):
 	return max(0, num)
 
+# 神经网络的前向传播，包括计算每个神经元的输出值，并更新连接的长时增强值
 func feed_forward():
 	for i in range(input_neuron_count, len(connections_internal)):
-		var is_output_neuron = i == turn_value_index or i == move_value_index
+		var is_output_neuron = i == turn_value_index or i == move_value_index # 检查当前神经元是否是输出神经元
 		var conn = connections_internal[i]
 		var new_value := 0.0
 		var activation
-		for j in range(0, len(conn[1]), 3):
-			activation = values[conn[1][j]] * conn[1][j+1]
-			new_value += activation
-			conn[1][j+2] = conn[1][j+2] * 0.99 + abs(activation) * 0.01
-		values[conn[0]] = new_value if is_output_neuron else relu(new_value)
+		for j in range(0, len(conn[1]), 3): # 遍历当前神经元的每个输入连接。每次迭代跳过3个元素，因为每个输入连接由三个值组成：输入神经元的索引、连接权重和上一个时间步的长时增强值
+			activation = values[conn[1][j]] * conn[1][j+1] # 计算输入神经元的值乘以连接权重，得到激活值
+			new_value += activation # 将激活值累加到 new_value 上，以计算当前神经元的总输入
+			conn[1][j+2] = conn[1][j+2] * 0.99 + abs(activation) * 0.01 # 更新连接的长时增强值。这里使用了一个简单的机制来模拟突触可塑性，即连接权重随时间的推移而变化
+		values[conn[0]] = new_value if is_output_neuron else relu(new_value) # 如果当前神经元是输出神经元，则其输出值直接设置为 new_value；否则，使用ReLU激活函数 relu 对 new_value 进行处理，并将结果存储在 values 数组中
 
 func get_movement_factor(ai_input=null):
 	#if thread.is_active():

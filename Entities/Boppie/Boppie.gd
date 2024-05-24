@@ -105,7 +105,7 @@ var draw_teeth = false
 var draw_hair = false
 
 # Energy and offspring
-var size_increases = [0.8, 1, 1.2]
+var size_increases = [0.8, 1, 1.2] # 升级3次
 var level = 1
 var energy = max_energy * (0.8 + Globals.rng.randf() * 0.2)
 var water = max_water
@@ -131,18 +131,19 @@ signal DrawSenses(new_value)
 # Init and draw
 # ==========================================================================
 
-func _init(_ai=null):
+func _init(_ai=null): # 初始化方法
 	# color.connect("ColorUpdated", self, "_on_colorUpdated")
-	if _ai == null:
+	if _ai == null: # 如果未设置初始化 ai，则使用神经网络 ai
 		_ai = NeuralNetwork.new(InnovationManager.common_innovation_ids)
-	nn_input_array = _ai.values
+	nn_input_array = _ai.values # ai 的 values 作为神经网络的输入
 	self.ai = _ai
 	add_child(timer_neuron)
-	randomize_dna()
+	randomize_dna() # 随机化 dna
 	
+# 个体加载完成后的操作
 func _ready():
-	initialize_rays()
-	initialize_dna()
+	initialize_rays() # 初始化光线
+	initialize_dna() # 初始化 DNA
 	spawn_time = Globals.elapsed_time
 	# energy_gradient = load(energy_gradient)
 	# energy_gradient.set_color(1, Color.from_hsv(color.hue, .5, .5))
@@ -195,6 +196,7 @@ func resolve_subproperty(property):
 	# Globals.debugMsg(last)
 	return [resolved_subproperty, last]
 
+# 对个体设置 DNA 的核心方法
 func set_dna(new_dna: Dictionary, mutation_factor=1, crossover_dna=null):
 	new_dna = new_dna.duplicate(true)
 	for property in new_dna: # 对子属性进行交叉和变异
@@ -307,6 +309,8 @@ func pop_temp_ai():
 	temp_ai = null
 
 # 计算 AI 输入，根据不同传感器的数据，生成对应的输入数组，用于神经网络计算
+# 通过更新 nn_input_array 来更新 ai.values，因为是变量引用
+# ai 默认情况下是 NeuralNetwork
 func calculate_ai_input(delta):
 	var index
 	var loss = 1.0 - delta * 10
@@ -440,7 +444,7 @@ func turn(factor, delta):
 	$Face.rotate_pupils(factor * turn_speed)
 	self.rotation += factor * turn_speed * delta 
 
-	
+# 物理循环处理
 func _physics_process(delta):
 	if not self.dead:
 		# 更新能量和水份
@@ -451,7 +455,7 @@ func _physics_process(delta):
 			if curr_ai:
 				# Globals.debugMsg(ai)
 				calculate_ai_input(delta) # 获取神经网络的输入数组
-				# TODO: 如何传入上一步构建的输入数组，来进行神经网络的计算
+				# 使用上一步构建的输入数组，来进行神经网络的计算
 				movement = clamp(curr_ai.get_movement_factor(), max_backwards_factor, max_boost_factor)
 				var turn = curr_ai.get_turn_factor()
 				# Flip turning when movement is backwards
@@ -508,9 +512,9 @@ func update_energy(add_energy):
 		offspring_energy += energy - max_energy
 		energy = max_energy
 		if old_level != curr_level():
-			if curr_level() < size_increases.size():
+			if curr_level() < size_increases.size(): # 升级，身体会变大
 				level_up(size_increases[curr_level()] * scale_factor)
-			else:
+			else: # 产生下一代
 				produce_offspring()
 				
 func take_damage(damage) -> float:

@@ -72,15 +72,15 @@ signal SpawnNewBoppie(at, dna)
 func random_coordinate():
 	return Vector2(Globals.rng.randf(), Globals.rng.randf())
 
-func random_world_coordinate():
+func random_world_coordinate(): # 返回随机的世界坐标
 	return random_coordinate() * (world_zone_end - world_zone_start) + world_zone_start
 	
-
+# 在2D世界中找到一个随机的空白位置，即没有其他对象与之重叠的位置
 func random_empty_world_coordinate():
-	for i in range(10):
+	for i in range(10): # 尝试10次找到空白的坐标
 		var coordinate = random_world_coordinate()
-		var space_state = get_world_2d().get_direct_space_state()
-		var result = space_state.intersect_point(coordinate, 1, [], 0x7FFFFFFF, true, true)
+		var space_state = get_world_2d().get_direct_space_state() # 获取2D世界的直接空间状态，这允许查询世界中对象之间的空间关系。
+		var result = space_state.intersect_point(coordinate, 1, [], 0x7FFFFFFF, true, true) # 检查指定的 coordinate 是否与任何其他对象相交。1 表示检查的半径大小，[] 表示碰撞层，0x7FFFFFFF 是一个很大的数字，表示碰撞掩码，true, true 分别表示是否检测碰撞体和是否检测区域碰撞
 		if not result or i == 9:
 			return coordinate
 
@@ -169,28 +169,26 @@ func add_random_boppies(count: int, config: BoppieConfiguration): # 添加随机
 		var dna2 = null
 		if config.fittest.size() >= 10 and Globals.rng.randf() > config.new_dna_chance:
 			var fittest_len = len(config.fittest)
-			var dna1_index = Globals.rng.randi() % fittest_len
-			var dna2_index = (dna1_index + (fittest_len - 1)) % fittest_len
+			var dna1_index = Globals.rng.randi() % fittest_len # e.g. 9%10=9
+			var dna2_index = (dna1_index + (fittest_len - 1)) % fittest_len # e.g. (9+9)%10=8
 			dna1 = config.fittest[dna1_index][1]
 			dna2 = config.fittest[dna2_index][1]
-		var boppie = add_boppie(random_empty_world_coordinate(), config.scene, dna1, dna2)
-
-			
+		# var boppie = add_boppie(random_empty_world_coordinate(), config.scene, dna1, dna2)
+		add_boppie(random_empty_world_coordinate(), config.scene, dna1, dna2)
 		
-		
-func add_food(at: Vector2):
-	var food = food_scene.instance()
+func add_food(at: Vector2): # 在指定位置生成食物
+	var food = food_scene.instance() # 实例化时会向 globals 记录食物数量
 	add_child(food)
 	food.global_position = at
 	# food.connect("FoodEaten", self, "_on_FoodEaten")
 	return food
 	
-func _on_FoodEaten(food):
+func _on_FoodEaten(food): # 废弃方法
 	unused_food_stack[unused_food_stack_index] = food
 	unused_food_stack_index += 1
 
 
-func spawn_food(count=max_food_count):
+func spawn_food(count=max_food_count): # 生成指定数量食物，不超过最大数量
 	var target_food_count = min(max_food_count, Globals.food_counts[Data.FoodType.PLANT] + count)
 	while Globals.food_counts[Data.FoodType.PLANT] < target_food_count:
 		add_food(random_empty_world_coordinate())
@@ -202,9 +200,9 @@ func take_control_of_boppie(boppie):
 		if controlled_boppie.temp_ai == player_ai:
 			controlled_boppie.pop_temp_ai()
 	controlled_boppie = boppie
-	emit_signal("BoppieControlChanged", controlled_boppie)
+	emit_signal("BoppieControlChanged", controlled_boppie) # 主要用来改变 UI
 	var invincibility = false if controlled_boppie == null else not controlled_boppie.can_die
-	emit_signal("BoppieInvincibilityChanged", controlled_boppie, invincibility)
+	emit_signal("BoppieInvincibilityChanged", controlled_boppie, invincibility) # 主要用来改变 UI
 	if controlled_boppie != null:
 		controlled_boppie.draw_senses = Globals.draw_current_senses
 		controlled_boppie.set_selected(true)
@@ -212,7 +210,7 @@ func take_control_of_boppie(boppie):
 
 func _process(_delta):
 	check_boppies()
-	if controlled_boppie != null:
+	if controlled_boppie != null: # 如果有控制的波比，将镜头移动到相应的位置
 		$Camera.global_position = controlled_boppie.global_position
 	else:
 		$Camera.global_position -= Utils.input_vectors() * 7
@@ -248,7 +246,7 @@ func _unhandled_input(event):
 		$Camera.position -= event.relative * $Camera._zoom_level
 		
 func produce_and_focus_offspring():
-	if controlled_boppie:
+	if controlled_boppie: # 产生下一代同时控制最新的个体
 		controlled_boppie.produce_offspring()
 		control_newest_boppie = true
 		
@@ -266,11 +264,11 @@ func toggle_controlled_boppie_invincibility(new_value=null):
 		
 func take_control_of_focused_boppie() -> bool:
 	if controlled_boppie != null:
-		if controlled_boppie.temp_ai != player_ai:
+		if controlled_boppie.temp_ai != player_ai: # 将 player ai 设置成当前控制的个体的临时 ai
 			controlled_boppie.add_temp_ai(player_ai)
 			return true
 		else:
-			controlled_boppie.pop_temp_ai()
+			controlled_boppie.pop_temp_ai() # 取消临时 ai 
 			return false
 	return false
 
@@ -346,18 +344,18 @@ func _on_BoppieDied(boppie):
 	Globals.boppies_died += 1
 	# possibly_replace_weakest_boppie(boppie)
 	if boppie == controlled_boppie:
-		if follow_fittest_boppie:
+		if follow_fittest_boppie: # 如果设置了跟随适应最好的个体，则控制它
 			take_control_of_fittest_boppie_in_group(boppie.type)
 		else:
-			take_control_of_boppie(null)
-	if spawn_food_on_death:
+			take_control_of_boppie(null) # 否则不控制任何个体
+	if spawn_food_on_death: # 如果死亡后产生食物
 		var food = food_scene.instance()
-		food.food_type = Data.FoodType.MEAT
+		food.food_type = Data.FoodType.MEAT # 食物类型为肉食种类
 		food.global_position = boppie.global_position
 		# food.modulate = food.modulate.darkened(.3)
 		add_child(food)
 	
-func _on_BoppieOffspring(boppie):
+func _on_BoppieOffspring(boppie): # 废弃方法
 	Globals.boppies_born += 1
 	var offspring_position = boppie.global_position - boppie.rotation_vector() * boppie.radius * 2.7
 	var scene

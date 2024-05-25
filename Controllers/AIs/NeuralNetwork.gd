@@ -70,14 +70,15 @@ func recalculate_internal_connections():
 		neuron_index_to_name[neuron_name_to_index[key]] = key
 	move_value_index = neuron_name_to_index["Move"] # 获取移动和转向的索引
 	turn_value_index = neuron_name_to_index["Turn"]
-			
+		
+	# connections_internal: List[Tuple[int, List[alternating int / float / float]]]
 	for output in dna.connections:
-		var connect_into = dna.connections[output]
-		connections_internal.append([neuron_name_to_index[output], []])
-		for key in connect_into:
-			connections_internal[-1][1].append(neuron_name_to_index[key])
-			connections_internal[-1][1].append(connect_into[key])
-			connections_internal[-1][1].append(0)
+		var connect_into = dna.connections[output] # 当前输出神经元连接到的所有输入神经元的信息
+		connections_internal.append([neuron_name_to_index[output], []]) # neuron_name_to_index是一个字典，它将神经元的名称映射到其索引,将当前输出神经元的索引和一个空列表添加到connections_internal列表中
+		for key in connect_into: # 遍历connect_into字典中的所有键。每个键都是一个与输出神经元相连的输入神经元的名称
+			connections_internal[-1][1].append(neuron_name_to_index[key]) # 将当前输入神经元的索引添加到connections_internal列表的最后一个元素中的第二个元素（即连接列表）
+			connections_internal[-1][1].append(connect_into[key]) # 将当前输入神经元与输出神经元之间的连接权重添加到connections_internal列表的最后一个元素中的第二个元素
+			connections_internal[-1][1].append(0) # 最后，将0添加到connections_internal列表的最后一个元素中的第二个元素。这个0可能是一个占位符或标志
 	initalize_senses_indeces_lookup()
 		
 	
@@ -170,13 +171,13 @@ func crossover_connections(other_connections):
 				dna.connections[output][input] = random_weight()
 	recalculate_internal_connections()
 	
-func strengthen_important_connections(factor=1):
+func strengthen_important_connections(factor=1): # 暂时未用
 	# print("Strengthening " + str(factor))
 	for connection in connections_internal:
 		var curr = connection[0]
 		var inputs = connection[1]
-		for i in range(0, len(inputs), 3):
-			inputs[i+1] += clamp(factor * inputs[i+2], -10, 10)
+		for i in range(0, len(inputs), 3): # 这个循环遍历inputs列表中的每三个元素。在inputs列表中，每三个元素构成一个组，分别代表输入神经元的索引、连接权重和可能的第三项
+			inputs[i+1] += clamp(factor * inputs[i+2], -10, 10) # 更新了连接权重,inputs[i+1]是连接权重，inputs[i+2]是原始权重或权重变化量
 		
 
 func mutate(property, mutability):
@@ -257,12 +258,12 @@ func mutate_structure(mutability):
 	
 func mutate_weights(mutability):
 	for connection in connections_internal:
-		var output = neuron_index_to_name[connection[0]]
-		for i in range(0, len(connection[1]), 3):
+		var output = neuron_index_to_name[connection[0]] # 从当前连接信息中提取输出神经元的索引，并使用neuron_index_to_name字典将其转换为神经元的名称
+		for i in range(0, len(connection[1]), 3): # connection[1]列表中，每三个元素构成一个组
 			var mutation = mutability * Globals.rng.randfn()
-			connection[1][i+1] += mutation
-			var input = neuron_index_to_name[connection[1][i]]
-			dna.connections[output][input] += mutation
+			connection[1][i+1] += mutation # 将计算出的变异量添加到当前连接权重上，从而改变权重
+			var input = neuron_index_to_name[connection[1][i]] # 从当前连接信息中提取输入神经元的索引，并使用neuron_index_to_name字典将其转换为神经元的名称
+			dna.connections[output][input] += mutation # 将相同的变异量添加到dna.connections字典中对应的连接权重上，确保dna对象中的连接权重与connections_internal列表中的权重保持一致
 
 func relu(num):
 	return max(0, num)

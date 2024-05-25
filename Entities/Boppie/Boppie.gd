@@ -135,6 +135,8 @@ func _init(_ai=null): # 初始化方法
 	# color.connect("ColorUpdated", self, "_on_colorUpdated")
 	if _ai == null: # 如果未设置初始化 ai，则使用神经网络 ai
 		_ai = NeuralNetwork.new(InnovationManager.common_innovation_ids)
+		# _ai = RandomAI.new()
+		# _ai = SmartAI.new()
 	nn_input_array = _ai.values # ai 的 values 作为神经网络的输入
 	self.ai = _ai
 	add_child(timer_neuron)
@@ -456,7 +458,8 @@ func _physics_process(delta):
 				# Globals.debugMsg(ai)
 				calculate_ai_input(delta) # 获取神经网络的输入数组
 				# 使用上一步构建的输入数组，来进行神经网络的计算
-				movement = clamp(curr_ai.get_movement_factor(), max_backwards_factor, max_boost_factor)
+				# movement = clamp(curr_ai.get_movement_factor(), max_backwards_factor, max_boost_factor)
+				movement = clamp(curr_ai.get_movement_factor(nn_input_array), max_backwards_factor, max_boost_factor)
 				var turn = curr_ai.get_turn_factor()
 				# Flip turning when movement is backwards
 				turn = clamp(turn * turn_speed, -1, 1) * (1 if movement >= 0 else -1)
@@ -465,7 +468,8 @@ func _physics_process(delta):
 				self.move(movement, delta)
 				self.turn(turn, delta)
 			if curr_ai == temp_ai:
-				ai.get_movement_factor()
+				# ai.get_movement_factor()
+				ai.get_movement_factor(nn_input_array)
 		else:
 			die()
 		# 根据身体能量更新波比的颜色

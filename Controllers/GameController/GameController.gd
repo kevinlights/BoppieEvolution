@@ -60,6 +60,8 @@ var food_scene = preload("res://Entities/Food/Food.tscn")
 var lake_scene = preload("res://Entities/World/Water/Lake.tscn")
 var controlled_boppie: Boppie = null
 var player_ai = Player.new()
+var rand_ai = RandomAI.new()
+var smart_ai = SmartAI.new()
 
 
 
@@ -158,9 +160,9 @@ func add_boppie(at: Vector2, scene: PackedScene, dna=null, dna2=null):
 	add_child(instance)
 	instance.set_owner(self)
 	instance.global_position = at # 设置位置
-	Globals.debugMsg("add boppie")
-	Globals.debugMsg(at.x)
-	Globals.debugMsg(at.y)
+	# Globals.debugMsg("add boppie")
+	# Globals.debugMsg(at.x)
+	# Globals.debugMsg(at.y)
 	if control_newest_boppie:
 		control_newest_boppie = false
 		take_control_of_boppie(instance) # 控制最新波比
@@ -271,7 +273,12 @@ func take_control_of_focused_boppie() -> bool:
 		if controlled_boppie.temp_ai != player_ai: # 将 player ai 设置成当前控制的个体的临时 ai
 			controlled_boppie.add_temp_ai(player_ai)
 			return true
+		# if controlled_boppie.temp_ai != rand_ai: # 将 player ai 设置成当前控制的个体的临时 ai
+		# 	Globals.debugMsg("add rand_ai")
+		# 	controlled_boppie.add_temp_ai(rand_ai)
+		# 	return true
 		else:
+			# Globals.debugMsg("pop temp ai")
 			controlled_boppie.pop_temp_ai() # 取消临时 ai 
 			return false
 	return false

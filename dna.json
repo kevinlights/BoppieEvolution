@@ -1,0 +1,118 @@
+{
+"ai.dna": {
+"connections": {
+"AllySense1": {
+
+},
+"AllySense2": {
+
+},
+"AllySense3": {
+
+},
+"AllySense4": {
+
+},
+"Bias": {
+
+},
+"DangerSense1": {
+
+},
+"DangerSense2": {
+
+},
+"DangerSense3": {
+
+},
+"DangerSense4": {
+
+},
+"Ground1": {
+
+},
+"Ground2": {
+
+},
+"Hunger": {
+
+},
+"Move": {
+"Bias": 0.854857,
+"DangerSense1": -1.03578,
+"DangerSense2": 0.136312,
+"DangerSense3": 0.150002,
+"DangerSense4": 0.34053,
+"Ground1": -0.115203,
+"Ground2": 0.487157,
+"Hunger": 0.43729,
+"Thirst": -0.270682,
+"Timer": 0.155862,
+"VisionRayEats1": -0.0173772,
+"VisionRayEats2": 0.36513,
+"VisionRayEats3": 0.390993,
+"VisionRayEats4": 0.647957,
+"VisionRayEats5": 0.0121566,
+"Water": 0.350314
+},
+"Thirst": {
+
+},
+"Timer": {
+
+},
+"Turn": {
+"Bias": -0.285548,
+"DangerSense1": 1.14853,
+"DangerSense2": -0.193587,
+"DangerSense3": 0.715921,
+"DangerSense4": 0.926937,
+"Ground1": 0.0523062,
+"Ground2": -0.111041,
+"Hunger": 0.0877196,
+"Thirst": -0.288644,
+"VisionRayEats1": 0.649451,
+"VisionRayEats2": -0.00165882,
+"VisionRayEats3": 0.126636,
+"VisionRayEats4": 0.620101,
+"VisionRayEats5": -0.274574,
+"Water": -0.146705
+},
+"VisionRayEats1": {
+
+},
+"VisionRayEats2": {
+
+},
+"VisionRayEats3": {
+
+},
+"VisionRayEats4": {
+
+},
+"VisionRayEats5": {
+
+},
+"Water": {
+
+}
+},
+"innovations": [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 64 ]
+},
+"armor": 0.0,
+"color.hue": 0.0887794,
+"danger_sense_radius": 169.474,
+"generation.i": 41,
+"max_backwards_factor": -0.963026,
+"max_boost_factor": 1.62133,
+"meat_tolerance": 0.0438073,
+"move_speed": 91.6784,
+"offspring_count": 1.58491,
+"offspring_mutability": 0.03,
+"ray_angle": 0.215351,
+"ray_length": 500.615,
+"scale_factor": 1.06035,
+"senses.bitmask": 1019,
+"timer_neuron.wait_time": 35.2696,
+"turn_speed": 2.87052
+}
